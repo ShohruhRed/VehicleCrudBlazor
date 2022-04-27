@@ -13,9 +13,12 @@ namespace CrudBlazor.Client.Services.VehicleService
         public List<Vehicle> Vehicles { get; set; } = new List<Vehicle>();
         public List<VehicleType> VehicleTypes { get; set; } = new List<VehicleType>();
 
-        public Task<Vehicle> GetSingleVehicle(int id)
+        public async Task<Vehicle> GetSingleVehicle(int id)
         {
-            throw new NotImplementedException();
+            var result = await _http.GetFromJsonAsync<Vehicle>($"api/vehicle/{id}");
+            if (result != null)
+                return  result;
+            throw new Exception("Vehicle not found!");
         }
 
         public async Task GetVehicles()

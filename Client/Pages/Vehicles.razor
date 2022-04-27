@@ -1,11 +1,12 @@
 ﻿@page "/vehicles"
 @inject IVehicleService VehicleService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Vehicles</PageTitle>
 
 <h3>Vehicles</h3>
 
-<table>
+<table class="table">
     <thead>
         <tr>
             <th>Vehicle Model</th>
@@ -16,10 +17,30 @@
         </tr>
     </thead>
     <tbody>
-        @fo
+        @foreach (var vehicle in VehicleService.Vehicles)
+        {
+            <tr>
+                <td>@vehicle.VehicleModel</td>
+                <td>@vehicle.VehicleLevel</td>
+                <td>@vehicle.VehicleCountry</td>
+                <td>@vehicle.VehicleType.Type</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowVehicle(vehicle.Id))" ><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        await VehicleService.GetVehicles();
+    }
+
+    void ShowVehicle(int id)
+    {
+        NavigationManager.NavigateTo($"editvehicle/{id}");
+    }
 
 }
