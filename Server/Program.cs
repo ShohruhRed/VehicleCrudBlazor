@@ -1,3 +1,4 @@
+global using Microsoft.EntityFrameworkCore;
 global using CrudBlazor.Shared;
 using Microsoft.AspNetCore.ResponseCompression;
 

@@ -20,14 +20,17 @@ namespace CrudBlazor.Server.Controllers
                 VehicleModel = "T95/FV4201 Chieftain",
                 VehicleLevel = "10",
                 VehicleCountry = "Great Britain",
-                VehicleType = vehicleTypes[0]
+                VehicleType = vehicleTypes[0],
+                VehicleTypeId = 1,
+
             },
             new Vehicle{
                 Id = 2,
                 VehicleModel = "Type 5 Heavy",
                 VehicleLevel = "10",
                 VehicleCountry = "Japan",
-                VehicleType = vehicleTypes[1]
+                VehicleType = vehicleTypes[1],
+                VehicleTypeId = 2,
             },
         };
         
@@ -35,6 +38,12 @@ namespace CrudBlazor.Server.Controllers
         public async Task<ActionResult<List<Vehicle>>> GetVehicles()
         {
             return Ok(vehicles);
+        }
+
+        [HttpGet("vehicletypes")]
+        public async Task<ActionResult<List<VehicleType>>> GetVehicleTypes()
+        {
+            return Ok(vehicleTypes);
         }
 
         [HttpGet("{id}")]
