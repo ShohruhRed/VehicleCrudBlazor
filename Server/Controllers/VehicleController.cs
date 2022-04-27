@@ -7,40 +7,33 @@ namespace CrudBlazor.Server.Controllers
     [ApiController]
     public class VehicleController : ControllerBase
     {
-        public static List<VehicleType> vehicleTypes = new List<VehicleType>
-        {
-            new VehicleType{Id = 1, Type = "SPG"},
-            new VehicleType{Id = 2, Type = "Heavy tank"}
-        };
+        private readonly DataContext _context;
 
-        public static List<Vehicle> vehicles = new List<Vehicle>
+        public VehicleController(DataContext context)
         {
-            new Vehicle{
-                Id = 1,
-                VehicleModel = "T95/FV4201 Chieftain",
-                VehicleLevel = "10",
-                VehicleCountry = "Great Britain",
-                VehicleType = vehicleTypes[0]
-            },
-            new Vehicle{
-                Id = 2,
-                VehicleModel = "Type 5 Heavy",
-                VehicleLevel = "10",
-                VehicleCountry = "Japan",
-                VehicleType = vehicleTypes[1]
-            },
-        };
-        
+            _context = context;
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<Vehicle>>> GetVehicles()
         {
+            var vehicles = await _context.Vehicles.Include(v => v.VehicleType).ToListAsync();
             return Ok(vehicles);
+        }
+
+        [HttpGet("vehicletypes")]
+        public async Task<ActionResult<List<VehicleType>>> GetVehicleTypes()
+        {
+            var vehicleTypes = await _context.VehicleTypes.ToListAsync();
+            return Ok(vehicleTypes);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Vehicle>> GetSingleVehicle(int id)
         {
-            var vehicle = vehicles.FirstOrDefault(h => h.Id == id);
+            var vehicle = await _context.Vehicles
+                .Include(v => v.VehicleType)
+                .FirstOrDefaultAsync(v => v.Id == id);
             if(vehicle == null)
             {
                 return NotFound("Sorry, no vehicle here. :/");

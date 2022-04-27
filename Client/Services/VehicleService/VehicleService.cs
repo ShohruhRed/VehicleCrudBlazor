@@ -26,11 +26,14 @@ namespace CrudBlazor.Client.Services.VehicleService
             var result = await _http.GetFromJsonAsync<List<Vehicle>>("api/vehicle");
             if (result != null)
                 Vehicles = result;
+            
         }
 
         public async Task GetVehicleTypes()
         {
-           
+            var result = await _http.GetFromJsonAsync<List<VehicleType>>("api/vehicle/vehicletypes");
+            if (result != null)
+                VehicleTypes = result;
         }
     }
 }

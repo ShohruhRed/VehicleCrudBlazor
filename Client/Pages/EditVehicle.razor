@@ -26,13 +26,30 @@ else
         <label for="vehiclecountry">Vehicle Country</label>
         <InputText id="firstcountry" @bind-Value="vehicle.VehicleCountry" class="form-control"></InputText>
     </div>
+    <div>
+        <label>Vehicle Type</label><br />
+        <InputSelect @bind-Value="vehicle.VehicleTypeId" class="form-select">
+            @foreach (var vehicleType in VehicleService.VehicleTypes)
+            {
+               <option value="@vehicleType.Id">@vehicleType.Type</option>
+            }         
+        </InputSelect>
+    </div>
+    <br />
+    <buttom type="submit" class="btn btn-primary">@btnText</buttom>
 </EditForm>
 
 @code {
     [Parameter]
     public int? Id { get; set; }
+    string btnText = string.Empty;
 
     Vehicle vehicle = new Vehicle { VehicleType = new VehicleType() };
+    protected override async Task OnInitializedAsync()
+    {
+        btnText = Id == null ? "Save new Vehicle" : "Update Vehicle";
+        await VehicleService.GetVehicleTypes();
+    }
 
     protected override async Task OnParametersSetAsync()
     {

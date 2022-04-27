@@ -11,12 +11,8 @@ namespace CrudBlazor.Shared
         public int Id { get; set; }
         public string VehicleModel { get; set; } = string.Empty;
         public string VehicleLevel { get; set; } = string.Empty;
-        public string VehicleCountry { get; set; }
+        public string VehicleCountry { get; set; } = string.Empty;
         public VehicleType? VehicleType { get; set; }
         public int VehicleTypeId { get; set; }
-
-
-
-
     }
 }
