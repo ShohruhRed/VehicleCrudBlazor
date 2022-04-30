@@ -31,6 +31,7 @@
         }
     </tbody>
 </table>
+<button class="btn btn-primary" @onclick="CreateNewVehicle">Create New Vehicle</button>
 
 @code {
     protected override async Task OnInitializedAsync()
@@ -41,6 +42,11 @@
     void ShowVehicle(int id)
     {
         NavigationManager.NavigateTo($"editvehicle/{id}");
+    }
+
+    void CreateNewVehicle()
+    {
+        NavigationManager.NavigateTo("/editvehicle");
     }
 
 }

@@ -41,5 +41,54 @@ namespace CrudBlazor.Server.Controllers
             return Ok(vehicle);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<List<Vehicle>>> CreateVehicle(Vehicle vehicle)
+        {
+            vehicle.VehicleType = null;
+            _context.Vehicles.Add(vehicle);
+            await _context.SaveChangesAsync();
+         
+            return Ok(await GetDbVehicles());
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<List<Vehicle>>> UpdateVehicle(Vehicle vehicle, int id)
+        {
+            var dbVehicle = await _context.Vehicles
+                 .Include(v => v.VehicleType)
+                 .FirstOrDefaultAsync(v => v.Id == id);
+            if (dbVehicle == null)
+                return NotFound("Sorry, but no vehicle for you. :/");
+
+            dbVehicle.VehicleModel = vehicle.VehicleModel;
+            dbVehicle.VehicleLevel = vehicle.VehicleLevel;
+            dbVehicle.VehicleCountry = vehicle.VehicleCountry;
+            dbVehicle.VehicleTypeId = vehicle.VehicleTypeId;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(await GetDbVehicles());
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<List<Vehicle>>> DeleteVehicle(int id)
+        {
+            var dbVehicle = await _context.Vehicles
+                 .Include(v => v.VehicleType)
+                 .FirstOrDefaultAsync(v => v.Id == id);
+            if (dbVehicle == null)
+                return NotFound("Sorry, but no vehicle for you. :/");
+
+            _context.Vehicles.Remove(dbVehicle);
+            await _context.SaveChangesAsync();
+
+            return Ok(await GetDbVehicles());
+        }
+
+        private async Task<List<Vehicle>> GetDbVehicles()
+        {
+            return await _context.Vehicles.Include(v => v.VehicleType).ToListAsync();
+        }
+
     }
 }

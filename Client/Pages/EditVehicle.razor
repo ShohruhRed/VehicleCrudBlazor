@@ -36,7 +36,8 @@ else
         </InputSelect>
     </div>
     <br />
-    <buttom type="submit" class="btn btn-primary">@btnText</buttom>
+    <button type="submit" class="btn btn-primary">@btnText</button>
+     <button type="button" class="btn btn-danger" @onclick="DeleteVehicle"> Delete Vehicle</button>
 </EditForm>
 
 @code {
@@ -55,7 +56,8 @@ else
     {
         if(Id == null)
         {
-            //create a new vehicle
+            vehicle.VehicleType = VehicleService.VehicleTypes[0];
+            vehicle.VehicleTypeId = vehicle.VehicleType.Id;
         }
         else
         {
@@ -65,7 +67,19 @@ else
 
     async Task HandleSubmit()
     {
-        
+        if(Id == null)
+        {
+            await VehicleService.CreateVehicle(vehicle);
+        }
+        else
+        {
+            await VehicleService.UpdateVehicle(vehicle);
+        }
+    }
+
+    async Task DeleteVehicle()
+    {
+        await VehicleService.DeleteVehicle(vehicle.Id);
     }
 
 }
